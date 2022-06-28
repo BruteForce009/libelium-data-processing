@@ -1,0 +1,44 @@
+{% extends "root.html" %}
+
+{% block main %}
+
+    <div class="sensor-card">
+    <table align="center" cellpadding="12px" id="sens-table">
+        <tr id="bold_em">
+            <td>NodeID</td>
+            <td>pm1</td>
+            <td>pm2</td>
+            <td>pm3</td>
+            <td>am</td>
+            <td>vane_str</td>
+            <td>sm</td>
+            <td>temp</td>
+            <td>humd</td>
+            <td>pres</td>
+            <td>lum</td>
+            <td>bat</td>
+            <td>timex</td>
+        </tr>
+        {% for temp in sensors %}
+        {% set sen_str = temp %}
+        {% set sensor = split_func(sen_str) %}
+        <tr>
+            <td>{{ sensor[0] }}</td>
+            <td>{{ sensor[1] }}</td>
+            <td>{{ sensor[2] }}</td>
+            <td>{{ sensor[3] }}</td>
+            <td>{{ sensor[4] }}</td>
+            <td>{{ sensor[5] }}</td>
+            <td>{{ sensor[6] }}</td>
+            <td>{{ sensor[7] }}</td>
+            <td>{{ sensor[8] }}</td>
+            <td>{{ sensor[9] }}</td>
+            <td>{{ sensor[10] }}</td>
+            <td>{{ sensor[11] }}</td>
+            <td>{{ sensor[12] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+{% endblock main %}

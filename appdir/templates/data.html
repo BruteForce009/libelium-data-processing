@@ -1,0 +1,7 @@
+{% extends "root.html" %}
+
+{% block main %}
+    {% for sensor in sensors %}
+        <p>{{ sensor }}</p>
+    {% endfor %}
+{% endblock main %}

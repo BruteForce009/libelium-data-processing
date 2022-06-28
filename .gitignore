@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*$py.class
+linode-setup.txt
+ngrok.exe
+.idea/
+venv/
