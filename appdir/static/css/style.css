@@ -10,6 +10,14 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+.page-item {
+    margin: 0px 5px;
+}
+
+#pagenav {
+  margin: 7px;
+}
+
 #bold_em {
   font-weight: bold;
 }

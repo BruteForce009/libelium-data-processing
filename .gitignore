@@ -3,5 +3,6 @@ __pycache__/
 *$py.class
 linode-setup.txt
 ngrok.exe
+*.json
 .idea/
 venv/

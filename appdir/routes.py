@@ -1,15 +1,20 @@
 from flask import render_template, url_for, flash, redirect, get_flashed_messages, request
 from appdir import app, db
 import appdir.models
-import appdir.forms
+from datetime import datetime
 import json
 import time
+
+
+def remove(string):
+    return string.replace(" ", "|")
 
 
 @app.route('/')
 @app.route("/data_")
 def data_():
-    sensors = appdir.models.SensorData.query.all()
+    page = request.args.get('page', 1, type=int)
+    sensors = appdir.models.SensorData.query.order_by(appdir.models.SensorData.ttime.desc()).paginate(page=page, per_page=12)
     return render_template('data_.html', sensors=sensors)
 
 
@@ -17,54 +22,49 @@ def data_():
 def data():
     if request.method == 'POST':
         NodeID = request.args.get('NodeID', type=str)
-        pm1 = request.args.get('tpluviometer1', type=str)
-        pm2 = request.args.get('tpluviometer2', type=str)
-        pm3 = request.args.get('tpluviometer3', type=str)
-        am = request.args.get('tanemometer', type=str)
-        vane_str = request.args.get('twd', type=str)
-        sm = request.args.get('tSoil_moist', type=str)
-        temp = request.args.get('ttemp', type=str)
-        humd = request.args.get('thumd', type=str)
-        pres = request.args.get('tpres', type=str)
-        lum = request.args.get('tLuminosity', type=str)
-        bat = request.args.get('tbat', type=float)
-        timex = request.args.get('ttime', type=str)
-        sensordata = appdir.models.SensorData(NodeID=NodeID, tpluviometer1=pm1, tpluviometer2=pm2, tpluviometer3=pm3, tanemometer=am, twd=vane_str, tSoil_moist=sm, ttemp=temp, thumd=humd, tpres=pres, tLuminosity=lum, tbat=bat, ttime=timex)
+        pm1 = request.args.get('pm1', type=str)
+        pm2 = request.args.get('pm2', type=str)
+        pm3 = request.args.get('pm3', type=str)
+        am = request.args.get('am', type=str)
+        twd = request.args.get('twd', type=str)
+        sm1 = request.args.get('sm1', type=str)
+        sm2 = request.args.get('sm2', type=str)
+        st = request.args.get('st', type=str)
+        lum = request.args.get('lum', type=str)
+        temp = request.args.get('temp', type=str)
+        humd = request.args.get('humd', type=str)
+        pres = request.args.get('pres', type=str)
+        bat = request.args.get('bat', type=float)
+        ttime = request.args.get('ttime', type=str)
+
+        sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
         db.session.add(sensordata)
         db.session.commit()
-    sensors = appdir.models.SensorData.query.all()
-    return render_template('data_.html', sensors=sensors)
+    return 'Done'
 
 
 @app.route("/datg", methods=['POST'])
 def datg():
-    NodeID = request.args.get('NodeID')
-    pm1 = request.args.get('tpluviometer1')
-    pm2 = request.args.get('tpluviometer2')
-    pm3 = request.args.get('tpluviometer3')
-    am = request.args.get('tanemometer')
-    vane_str = request.args.get('twd')
-    sm = request.args.get('tSoil_moist')
-    temp = request.args.get('ttemp')
-    humd = request.args.get('thumd')
-    pres = request.args.get('tpres')
-    lum = request.args.get('tLuminosity')
-    bat = request.args.get('tbat')
-    timex = request.args.get('ttime')
-    sensordata = appdir.models.SensorData(NodeID=NodeID, tpluviometer1=pm1, tpluviometer2=pm2, tpluviometer3=pm3, tanemometer=am, twd=vane_str, tSoil_moist=sm, ttemp=temp, thumd=humd, tpres=pres, tLuminosity=lum, tbat=bat, ttime=timex)
+    NodeID = request.args.get('NodeID', type=str)
+    pm1 = request.args.get('pm1', type=str)
+    pm2 = request.args.get('pm2', type=str)
+    pm3 = request.args.get('pm3', type=str)
+    am = request.args.get('am', type=str)
+    twd = request.args.get('twd', type=str)
+    sm1 = request.args.get('sm1', type=str)
+    sm2 = request.args.get('sm2', type=str)
+    st = request.args.get('st', type=str)
+    lum = request.args.get('lum', type=str)
+    temp = request.args.get('temp', type=str)
+    humd = request.args.get('humd', type=str)
+    pres = request.args.get('pres', type=str)
+    bat = request.args.get('bat', type=float)
+    ttime = request.args.get('ttime', type=str)
+
+    sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
     db.session.add(sensordata)
     db.session.commit()
-    sensors = appdir.models.SensorData.query.all()
-    return render_template('data_.html', sensors=sensors)
-
-
-@app.route("/datx?NodeID=<NodeID>&tpluviometer1=<pm1>&tpluviometer2=<pm2>&tpluviometer3=<pm3>&tanemometer=<am>&twd=<vane_str>&tSoil_moist=<sm>&ttemp=<temp>&thumd=<humd>&tpres=<pres>&tLuminosity=<lum>&tbat=<int:bat>&ttime=<timex>", methods=['GET', 'POST'])
-def datx(NodeID, pm1, pm2, pm3, am, vane_str, sm, temp, humd, pres, lum, bat, timex):
-    sensordata = appdir.models.SensorData(NodeID=NodeID, tpluviometer1=pm1, tpluviometer2=pm2, tpluviometer3=pm3, tanemometer=am, twd=vane_str, tSoil_moist=sm, ttemp=temp, thumd=humd, tpres=pres, tLuminosity=lum, tbat=bat, ttime=timex)
-    db.session.add(sensordata)
-    db.session.commit()
-    sensors = appdir.models.SensorData.query.all()
-    return render_template('data_.html', sensors=sensors)
+    return 'Done'
 
 
 @app.route("/jsondata", methods=['POST'])
@@ -72,21 +72,64 @@ def jsondata():
     request_data = request.get_json()
 
     NodeID = request_data['NodeID']
-    pm1 = request_data['tpluviometer1']
-    pm2 = request_data['tpluviometer2']
-    pm3 = request_data['tpluviometer3']
-    am = request_data['tanemometer']
-    vane_str = request_data['twd']
-    sm = request_data['tSoil_moist']
-    temp = request_data['ttemp']
-    humd = request_data['thumd']
-    pres = request_data['tpres']
-    lum = request_data['tLuminosity']
-    bat = request_data['tbat']
-    timex = request_data['ttime']
+    pm1 = float(request_data['pm1'])
+    pm2 = float(request_data['pm2'])
+    pm3 = float(request_data['pm3'])
+    am = float(request_data['am'])
+    twd = request_data['twd']
+    sm1 = float(request_data['sm1'])
+    sm2 = float(request_data['sm2'])
+    st = float(request_data['st'])
+    lum = float(request_data['lum'])
+    temp = float(request_data['temp'])
+    humd = float(request_data['humd'])
+    pres = float(request_data['pres'])
+    bat = float(request_data['bat'])
+    ttime = request_data['ttime']
 
-    sensordata = appdir.models.SensorData(NodeID=NodeID, tpluviometer1=pm1, tpluviometer2=pm2, tpluviometer3=pm3, tanemometer=am, twd=vane_str, tSoil_moist=sm, ttemp=temp, thumd=humd, tpres=pres, tLuminosity=lum, tbat=bat, ttime=timex)
+    sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
     db.session.add(sensordata)
     db.session.commit()
-    sensors = appdir.models.SensorData.query.all()
-    return render_template('data_.html', sensors=sensors)
+    return 'Done'
+
+
+@app.route("/newjsondata", methods=['POST'])
+def newjsondata():
+    request_data = request.get_json()
+    ttime = remove(f'{datetime.utcnow()}')
+    if request_data:
+        if 'NodeID' in request_data:
+            NodeID = request_data['NodeID']
+        if 'pm1' in request_data:
+            pm1 = float(request_data['pm1'])
+        if 'pm2' in request_data:
+            pm2 = float(request_data['pm2'])
+        if 'pm3' in request_data:
+            pm3 = float(request_data['pm3'])
+        if 'am' in request_data:
+            am = float(request_data['am'])
+        if 'twd' in request_data:
+            twd = request_data['twd']
+        if 'sm1' in request_data:
+            sm1 = float(request_data['sm1'])
+        if 'sm2' in request_data:
+            sm2 = float(request_data['sm2'])
+        if 'st' in request_data:
+            st = float(request_data['st'])
+        if 'lum' in request_data:
+            lum = float(request_data['lum'])
+        if 'temp' in request_data:
+            temp = float(request_data['temp'])
+        if 'humd' in request_data:
+            humd = float(request_data['humd'])
+        if 'pres' in request_data:
+            pres = float(request_data['pres'])
+        if 'bat' in request_data:
+            bat = float(request_data['bat'])
+        if 'ttime' in request_data:
+            ttime = request_data['ttime']
+
+        sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
+        db.session.add(sensordata)
+        db.session.commit()
+    return 'Done'
