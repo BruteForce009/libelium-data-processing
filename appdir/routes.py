@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect, get_flashed_message
 from appdir import app, db
 import appdir.models
 from datetime import datetime
+import math
 import json
 import time
 
@@ -15,7 +16,8 @@ def remove(string):
 def data_():
     page = request.args.get('page', 1, type=int)
     sensors = appdir.models.SensorData.query.order_by(appdir.models.SensorData.ttime.desc()).paginate(page=page, per_page=12)
-    return render_template('data_.html', sensors=sensors)
+    ttl = math.floor(sensors.total/12 + 1)
+    return render_template('data_.html', sensors=sensors, ttl=ttl)
 
 
 @app.route("/data", methods=['POST'])
