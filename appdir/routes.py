@@ -1,10 +1,8 @@
-from flask import render_template, url_for, flash, redirect, get_flashed_messages, request
+from flask import render_template, url_for, request
 from appdir import app, db
 import appdir.models
 from datetime import datetime
 import math
-import json
-import time
 
 
 def remove(string):
@@ -12,61 +10,22 @@ def remove(string):
 
 
 @app.route('/')
+@app.route("/reroute")
+def reroute():
+    return render_template('re-route.html')
+
+
 @app.route("/data_")
 def data_():
     page = request.args.get('page', 1, type=int)
-    sensors = appdir.models.SensorData.query.order_by(appdir.models.SensorData.ttime.desc()).paginate(page=page, per_page=12)
-    ttl = math.floor(sensors.total/12 + 1)
-    return render_template('data_.html', sensors=sensors, ttl=ttl)
+    sensorL = appdir.models.SensorData.query.order_by(appdir.models.SensorData.rtctime.desc()).paginate(page=page, per_page=9)
+    ttl = math.floor(sensorL.total/9 + 1)
+    return render_template('data_.html', sensorL=sensorL, ttl=ttl)
 
 
-@app.route("/data", methods=['POST'])
-def data():
-    if request.method == 'POST':
-        NodeID = request.args.get('NodeID', type=str)
-        pm1 = request.args.get('pm1', type=str)
-        pm2 = request.args.get('pm2', type=str)
-        pm3 = request.args.get('pm3', type=str)
-        am = request.args.get('am', type=str)
-        twd = request.args.get('twd', type=str)
-        sm1 = request.args.get('sm1', type=str)
-        sm2 = request.args.get('sm2', type=str)
-        st = request.args.get('st', type=str)
-        lum = request.args.get('lum', type=str)
-        temp = request.args.get('temp', type=str)
-        humd = request.args.get('humd', type=str)
-        pres = request.args.get('pres', type=str)
-        bat = request.args.get('bat', type=float)
-        ttime = request.args.get('ttime', type=str)
-
-        sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
-        db.session.add(sensordata)
-        db.session.commit()
-    return 'Done'
-
-
-@app.route("/datg", methods=['POST'])
-def datg():
-    NodeID = request.args.get('NodeID', type=str)
-    pm1 = request.args.get('pm1', type=str)
-    pm2 = request.args.get('pm2', type=str)
-    pm3 = request.args.get('pm3', type=str)
-    am = request.args.get('am', type=str)
-    twd = request.args.get('twd', type=str)
-    sm1 = request.args.get('sm1', type=str)
-    sm2 = request.args.get('sm2', type=str)
-    st = request.args.get('st', type=str)
-    lum = request.args.get('lum', type=str)
-    temp = request.args.get('temp', type=str)
-    humd = request.args.get('humd', type=str)
-    pres = request.args.get('pres', type=str)
-    bat = request.args.get('bat', type=float)
-    ttime = request.args.get('ttime', type=str)
-
-    sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
-    db.session.add(sensordata)
-    db.session.commit()
-    return 'Done'
+@app.route("/data_plot")
+def data_plot():
+    return render_template('data_plot.html')
 
 
 @app.route("/jsondata", methods=['POST'])
@@ -79,17 +38,25 @@ def jsondata():
     pm3 = float(request_data['pm3'])
     am = float(request_data['am'])
     twd = request_data['twd']
-    sm1 = float(request_data['sm1'])
-    sm2 = float(request_data['sm2'])
+    sm = float(request_data['sm'])
     st = float(request_data['st'])
     lum = float(request_data['lum'])
     temp = float(request_data['temp'])
     humd = float(request_data['humd'])
     pres = float(request_data['pres'])
+    lat = float(request_data['lat'])
+    NSI = request_data['NSI']
+    long = float(request_data['long'])
+    EWI = request_data['EWI']
+    alt = float(request_data['alt'])
     bat = float(request_data['bat'])
-    ttime = request_data['ttime']
+    ttime = int(request_data['ttime'])
 
-    sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
+    rtctime = ttime
+    new_time = datetime.fromtimestamp(ttime)
+    ttime = remove(f'{new_time}')
+
+    sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm=sm, st=st, lum=lum, temp=temp, humd=humd, pres=pres, lat=lat, NSI=NSI, long=long, EWI=EWI, alt=alt, bat=bat, ttime=ttime, rtctime=rtctime)
     db.session.add(sensordata)
     db.session.commit()
     return 'Done'
@@ -98,7 +65,14 @@ def jsondata():
 @app.route("/newjsondata", methods=['POST'])
 def newjsondata():
     request_data = request.get_json()
+
+    lat = 1.23
+    NSI = 'X'
+    long = 1.23
+    EWI = 'X'
+    alt = 1.23
     ttime = remove(f'{datetime.utcnow()}')
+
     if request_data:
         if 'NodeID' in request_data:
             NodeID = request_data['NodeID']
@@ -112,10 +86,8 @@ def newjsondata():
             am = float(request_data['am'])
         if 'twd' in request_data:
             twd = request_data['twd']
-        if 'sm1' in request_data:
-            sm1 = float(request_data['sm1'])
-        if 'sm2' in request_data:
-            sm2 = float(request_data['sm2'])
+        if 'sm' in request_data:
+            sm = float(request_data['sm'])
         if 'st' in request_data:
             st = float(request_data['st'])
         if 'lum' in request_data:
@@ -126,12 +98,25 @@ def newjsondata():
             humd = float(request_data['humd'])
         if 'pres' in request_data:
             pres = float(request_data['pres'])
+        if 'lat' in request_data:
+            lat = float(request_data['lat'])
+        if 'NSI' in request_data:
+            NSI = request_data['NSI']
+        if 'long' in request_data:
+            long = float(request_data['long'])
+        if 'EWI' in request_data:
+            EWI = request_data['EWI']
+        if 'alt' in request_data:
+            alt = float(request_data['alt'])
         if 'bat' in request_data:
             bat = float(request_data['bat'])
         if 'ttime' in request_data:
-            ttime = request_data['ttime']
+            ttime = int(request_data['ttime'])
+            rtctime = ttime
+            new_time = datetime.fromtimestamp(ttime)
+            ttime = remove(f'{new_time}')
 
-        sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm1=sm1, sm2=sm2, st=st, lum=lum, temp=temp, humd=humd, pres=pres, bat=bat, ttime=ttime)
+        sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm=sm, st=st, lum=lum, temp=temp, humd=humd, pres=pres, lat=lat, NSI=NSI, long=long, EWI=EWI, alt=alt, bat=bat, ttime=ttime, rtctime=rtctime)
         db.session.add(sensordata)
         db.session.commit()
     return 'Done'

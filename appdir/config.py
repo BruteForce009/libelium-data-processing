@@ -1,5 +1,4 @@
-import os
-
+# USE ENVIRONMENT VARIABLES FOR DEPLOYMENT
 
 class Config:
     SECRET_KEY = "123456789"

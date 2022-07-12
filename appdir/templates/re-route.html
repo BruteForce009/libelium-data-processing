@@ -1,0 +1,8 @@
+{% extends "root.html" %}
+
+{% block main %}
+    <div id="reroute">
+        <a href="{{ url_for('data_') }}"><button class="op-button" id="log-btn">Raw Data</button></a>
+        <a href="{{ url_for('data_plot') }}"><button class="op-button" id="plot-btn">Plots</button></a>
+    </div>
+{% endblock main %}

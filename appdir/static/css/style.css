@@ -10,24 +10,39 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+#reroute{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .page-item {
     margin: 0px 5px;
 }
 
 #pagenav {
-  margin: 7px;
+  margin: 2px 7px;
 }
 
 #bold_em {
+  font-weight: bold;
+  background-color: #8c8c8c;
+}
+
+.bold_em {
+  font-family: "Courier" ,monospace;
+  font-size: 14px;
   font-weight: bold;
 }
 
 #success-box, #fail-box {
     display: flex;
-    /* justify-content: center;
-    align-items: center; */
-    /* margin-left:7px;
-    margin-right:7px; */
     margin: auto;
     max-width:500px;
 }
@@ -46,7 +61,8 @@ h1, h2, h3, h4, h5, h6 {
     font-family: "Monaco", monospace;
     font-weight: bold;
     font-size: 20px;
-    margin: 10px 10px;
+    margin-left: 7px;
+    margin-right: 12px;
 }
 
 tr {
@@ -54,14 +70,22 @@ tr {
 }
 
 tr:hover {
-  background-color: #D6EEEE;
+  background-color: #f4f4f4;
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
 .sensor-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 14px 7px;
   padding: 5px 5px;
   font-family: "Moncao" ,monospace;
   font-size: 16px;
-  text-align: center;
 }
 
 li, a, button {
@@ -70,15 +94,13 @@ li, a, button {
   font-size: 15px;
   color: #edf0f1;
   text-decoration: none;
-  cursor: pointer;
 }
 
-/* header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px 10%;
-} */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #8c8c8c;
+}
 
 header {
   display: flex;
@@ -105,7 +127,7 @@ header {
 
 .nav-links li {
   display: inline-block;
-  padding: 0px 15px;
+  padding: 0px 0px;
 }
 
 .nav-links li a {
@@ -116,38 +138,30 @@ header {
   color: #0088a9;
 }
 
-button {
-  padding: 5px 10px;
+.op-button {
+  padding: 7px 30px;
   border: none;
-  border-radius: 15px;
+  border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease 0.1s;
 }
 
 #log-btn {
-  background-color: rgba(82, 194, 2, 1);
-  /* background-color: rgba(126, 250, 17, 1); */
+  background-color: rgba(30, 150, 150, 1);
+  margin: 0px 20px;
 }
 
 #log-btn:hover {
+  background-color: rgba(30, 150, 150, 0.7);
+}
+
+#plot-btn{
+  background-color: rgba(82, 194, 2, 1);
+  margin: 0px 20px;
+}
+
+#plot-btn:hover {
   background-color: rgba(82, 194, 2, 0.7);
-  /* background-color: rgba(126, 250, 17, 0.7); */
-}
-
-#sign-btn {
-  background-color: rgba(30, 150, 150, 1);
-}
-
-#sign-btn:hover {
-  background-color: rgba(30, 150, 150, 0.7);
-}
-
-#out-btn{
-  background-color: rgba(30, 150, 150, 1);
-}
-
-#out-btn:hover {
-  background-color: rgba(30, 150, 150, 0.7);
 }
 
 .form-wrapper {
