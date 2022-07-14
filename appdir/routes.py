@@ -66,12 +66,24 @@ def jsondata():
 def newjsondata():
     request_data = request.get_json()
 
+    NodeID = 'X'
+    pm1 = 1.23
+    pm2 = 1.23
+    pm3 = 1.23
+    am = 1.23
+    twd = 'X'
+    sm = 1.23
+    st = 1.23
+    lum = 1.23
+    temp = 1.23
+    humd = 1.23
+    pres = 1.23
     lat = 1.23
     NSI = 'X'
     long = 1.23
     EWI = 'X'
     alt = 1.23
-    ttime = remove(f'{datetime.utcnow()}')
+    bat = 1.23
 
     if request_data:
         if 'NodeID' in request_data:
@@ -115,6 +127,8 @@ def newjsondata():
             rtctime = ttime
             new_time = datetime.fromtimestamp(ttime)
             ttime = remove(f'{new_time}')
+        else:
+            ttime = remove(f'{datetime.utcnow()}')
 
         sensordata = appdir.models.SensorData(NodeID=NodeID, pm1=pm1, pm2=pm2, pm3=pm3, am=am, twd=twd, sm=sm, st=st, lum=lum, temp=temp, humd=humd, pres=pres, lat=lat, NSI=NSI, long=long, EWI=EWI, alt=alt, bat=bat, ttime=ttime, rtctime=rtctime)
         db.session.add(sensordata)
