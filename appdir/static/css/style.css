@@ -10,6 +10,32 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #8c8c8c;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 7px 16px;
+  transition: 0.3s;
+  color: #000000;
+}
+
+.tab button:hover {
+  background-color: #f4f4f4;
+}
+
+.tab button.active {
+  background-color: #c6c6c6;
+  border: 1px solid #f4f4f4;
+}
+
 #reroute{
     display: flex;
     justify-content: center;

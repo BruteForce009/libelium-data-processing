@@ -2,12 +2,28 @@ from flask import render_template, url_for, request
 from appdir import app, db
 import appdir.models
 from datetime import datetime
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import math
+import sqlalchemy
+import mpld3
 
 
 def remove(string):
     return string.replace(" ", "|")
 
+
+# @app.route('/', methods=['GET', 'POST'])
+# def lora():
+#     if request.method == 'POST':
+#         request_data = request.get_json()
+#         if request_data:
+#             return render_template('lora.html', request_data=request_data)
+#         else:
+#             return render_template('empty.html')
+#     return "NULL"
 
 @app.route('/')
 @app.route("/reroute")
@@ -25,7 +41,182 @@ def data_():
 
 @app.route("/data_plot")
 def data_plot():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    pm1 = df['pm1']
+    ttime = df['ttime']
+    plt.style.use('ggplot')
+    plt.plot(ttime, pm1, 'x--r', label='Pluviometer 1')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Pluviometer 1')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/pm1.png')
+
     return render_template('data_plot.html')
+
+
+@app.route("/pm2")
+def pm2():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    pm2 = df['pm2']
+    plt.style.use('ggplot')
+    plt.plot(ttime, pm2, 'x--g', label='Pluviometer 2')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Pluviometer 2')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/pm2.png')
+
+    return render_template('pm2.html')
+
+
+@app.route("/pm3")
+def pm3():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    pm3 = df['pm3']
+    plt.style.use('ggplot')
+    plt.plot(ttime, pm3, 'x--b', label='Pluviometer 3')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Pluviometer 3')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/pm3.png')
+
+    return render_template('pm3.html')
+
+
+@app.route("/anemo")
+def anemo():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    am = df['am']
+    plt.style.use('ggplot')
+    plt.plot(ttime, am, 'x--r', label='Anemometer')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Anemometer')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/am.png')
+
+    return render_template('anemo.html')
+
+
+@app.route("/sm")
+def sm():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    sm = df['sm']
+    plt.style.use('ggplot')
+    plt.plot(ttime, sm, 'x--r', label='Soil Moisture')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Soil Moisture')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/sm.png')
+
+    return render_template('sm.html')
+
+
+@app.route("/st")
+def st():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    st = df['st']
+    plt.style.use('ggplot')
+    plt.plot(ttime, st, 'x--r', label='Soil Temperature')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Soil Temperature')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/st.png')
+
+    return render_template('st.html')
+
+
+@app.route("/lum")
+def lum():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    lum = df['lum']
+    plt.style.use('ggplot')
+    plt.plot(ttime, lum, 'x--r', label='Luminosity')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Luminosity')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/lum.png')
+
+    return render_template('lum.html')
+
+
+@app.route("/temp")
+def temp():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    temp = df['temp']
+    plt.style.use('ggplot')
+    plt.plot(ttime, temp, 'x--r', label='Temperature')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Temperature')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/temp.png')
+
+    return render_template('temp.html')
+
+
+@app.route("/humd")
+def humd():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    humd = df['humd']
+    plt.style.use('ggplot')
+    plt.plot(ttime, humd, 'x--r', label='Humidity')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('humd')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/humd.png')
+
+    return render_template('humd.html')
+
+
+@app.route("/pres")
+def pres():
+    conn = db.engine.connect()
+    df = pd.read_sql_table('sensor_data', conn)
+    ttime = df['ttime']
+    pres = df['pres']
+    plt.style.use('ggplot')
+    plt.plot(ttime, pres, 'x--r', label='Pressure')
+    plt.xlabel('Time')
+    plt.ylabel('Readings')
+    plt.title('Pressure')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('appdir/static/images/pres.png')
+
+    return render_template('pres.html')
 
 
 @app.route("/jsondata", methods=['POST'])
