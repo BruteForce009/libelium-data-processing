@@ -11,6 +11,9 @@ import math
 import mpld3
 
 
+plt.rcParams['figure.figsize'] = [7, 5]
+
+
 def remove(string):
     return string.replace(" ", "|")
 
@@ -33,18 +36,18 @@ def data_():
 def data_plot():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    pm1 = df['pm1']
-    ttime = df['ttime']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    pm1 = sorted['pm1']
     x_indexes = np.arange(len(ttime))
     plt.figure(1)
-    plt.style.use('ggplot')
-    plt.plot(x_indexes, pm1, '.-r', label='pm1')
-    plt.xlabel('Time')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, pm1, label='pm1')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Rain in the current hour (mm)')
     plt.title('Pluviometer 1')
     plt.grid(True)
     plt.savefig('appdir/static/images/pm1.png')
-
     return render_template('data_plot.html')
 
 
@@ -52,18 +55,18 @@ def data_plot():
 def pm2():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    pm2 = df['pm2']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    pm2 = sorted['pm2']
+    x_indexes = np.arange(len(ttime))
     plt.figure(2)
-    plt.style.use('ggplot')
-    plt.plot(ttime, pm2, 'x--g', label='pm2')
-    plt.xlabel('Time')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, pm2, label='pm2')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Rain in the previous hour (mm)')
     plt.title('Pluviometer 2')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/pm2.png')
-
     return render_template('pm2.html')
 
 
@@ -71,18 +74,18 @@ def pm2():
 def pm3():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    pm3 = df['pm3']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    pm3 = sorted['pm3']
+    x_indexes = np.arange(len(ttime))
     plt.figure(3)
     plt.style.use('ggplot')
-    plt.plot(ttime, pm3, 'x--b', label='pm3')
-    plt.xlabel('Time')
+    plt.plot(x_indexes, pm3, label='pm3')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Rain in the last 24 hours (mm)')
     plt.title('Pluviometer 3')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/pm3.png')
-
     return render_template('pm3.html')
 
 
@@ -90,18 +93,18 @@ def pm3():
 def anemo():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    am = df['am']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    am = sorted['am']
+    x_indexes = np.arange(len(ttime))
     plt.figure(4)
-    plt.style.use('ggplot')
-    plt.plot(ttime, am, 'x--r', label='Anemometer')
-    plt.xlabel('Time')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, am, label='Anemometer')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Wind Speed (km/h)')
     plt.title('Anemometer')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/am.png')
-
     return render_template('anemo.html')
 
 
@@ -109,18 +112,18 @@ def anemo():
 def sm():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    sm = df['sm']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    sm = sorted['sm']
+    x_indexes = np.arange(len(ttime))
     plt.figure(5)
-    plt.style.use('ggplot')
-    plt.plot(ttime, sm, 'x--r', label='Soil Moisture')
-    plt.xlabel('Soil moisture (centibar)')
-    plt.ylabel('Readings')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, sm, label='Soil Moisture')
+    plt.xlabel('Readings (288/day)')
+    plt.ylabel('Soil moisture (centibar)')
     plt.title('Watermark')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/sm.png')
-
     return render_template('sm.html')
 
 
@@ -128,18 +131,18 @@ def sm():
 def st():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    st = df['st']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    st = sorted['st']
+    x_indexes = np.arange(len(ttime))
     plt.figure(6)
-    plt.style.use('ggplot')
-    plt.plot(ttime, st, 'x--r', label='Soil Temperature')
-    plt.xlabel('Time')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, st, label='Soil Temperature')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Soil Temperature (°C)')
     plt.title('PT-1000')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/st.png')
-
     return render_template('st.html')
 
 
@@ -147,18 +150,18 @@ def st():
 def lum():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    lum = df['lum']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    lum = sorted['lum']
+    x_indexes = np.arange(len(ttime))
     plt.figure(7)
-    plt.style.use('ggplot')
-    plt.plot(ttime, lum, 'x--r', label='Luminosity')
-    plt.xlabel('Time')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, lum, label='Luminosity')
+    plt.xlabel('Readings (288/day)')
     plt.ylabel('Illuminance (lux)')
     plt.title('Luminosity')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/lum.png')
-
     return render_template('lum.html')
 
 
@@ -166,18 +169,18 @@ def lum():
 def temp():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    temp = df['temp']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    temp = sorted['temp']
+    x_indexes = np.arange(len(ttime))
     plt.figure(8)
-    plt.style.use('ggplot')
-    plt.plot(ttime, temp, 'x--r', label='Temperature')
-    plt.xlabel('Time')
-    plt.ylabel('°C')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, temp, label='Temperature')
+    plt.xlabel('Readings (288/day)')
+    plt.ylabel('Celsius (°C)')
     plt.title('Temperature')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/temp.png')
-
     return render_template('temp.html')
 
 
@@ -185,18 +188,18 @@ def temp():
 def humd():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    humd = df['humd']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    humd = sorted['humd']
+    x_indexes = np.arange(len(ttime))
     plt.figure(9)
-    plt.style.use('ggplot')
-    plt.plot(ttime, humd, 'x--r', label='Humidity')
-    plt.xlabel('Time')
-    plt.ylabel('%')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, humd, label='Humidity')
+    plt.xlabel('Readings (288/day)')
+    plt.ylabel('Percentage (%)')
     plt.title('humd')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/humd.png')
-
     return render_template('humd.html')
 
 
@@ -204,18 +207,19 @@ def humd():
 def pres():
     conn = db.engine.connect()
     df = pd.read_sql_table('sensor_data', conn)
-    ttime = df['ttime']
-    pres = df['pres']
+    sorted = df.sort_values(by='rtctime', ascending=True)
+    ttime = sorted['rtctime']
+    pres = sorted['pres']
+    pres = pres/101325
+    x_indexes = np.arange(len(ttime))
     plt.figure(10)
-    plt.style.use('ggplot')
-    plt.plot(ttime, pres, 'x--r', label='Pressure')
-    plt.xlabel('Time')
-    plt.ylabel('Pascal')
+    plt.style.use('fivethirtyeight')
+    plt.bar(x_indexes, pres, label='Pressure')
+    plt.xlabel('Readings (288/day)')
+    plt.ylabel('Standard Atmosphere (atm)')
     plt.title('Pressure')
     plt.grid(True)
-    
     plt.savefig('appdir/static/images/pres.png')
-
     return render_template('pres.html')
 
 

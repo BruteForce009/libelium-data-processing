@@ -1,6 +1,16 @@
-{% extends "root.html" %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Site</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/PictureForm.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/opensensor.js')}}"></script>
+</head>
+<body>
 
-{% block main %}
     <div class="tab">
         <a href="{{ url_for('data_plot') }}"><button class="tablinks">Pluvio 1</button></a>
         <a href="{{ url_for('pm2') }}"><button class="tablinks">Pluvio 2</button></a>
@@ -18,4 +28,5 @@
         <img src="{{url_for('static', filename='images/am.png')}}" class="imgplotz"/>
     </div>
 
-{% endblock main %}
+</body>
+</html>
