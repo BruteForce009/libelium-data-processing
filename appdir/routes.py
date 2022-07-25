@@ -47,6 +47,7 @@ def data_plot():
     plt.ylabel('Rain in the current hour (mm)')
     plt.title('Pluviometer 1')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/pm1.png')
     return render_template('data_plot.html')
 
@@ -66,6 +67,7 @@ def pm2():
     plt.ylabel('Rain in the previous hour (mm)')
     plt.title('Pluviometer 2')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/pm2.png')
     return render_template('pm2.html')
 
@@ -85,6 +87,7 @@ def pm3():
     plt.ylabel('Rain in the last 24 hours (mm)')
     plt.title('Pluviometer 3')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/pm3.png')
     return render_template('pm3.html')
 
@@ -104,6 +107,7 @@ def anemo():
     plt.ylabel('Wind Speed (km/h)')
     plt.title('Anemometer')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/am.png')
     return render_template('anemo.html')
 
@@ -123,6 +127,7 @@ def sm():
     plt.ylabel('Soil moisture (centibar)')
     plt.title('Watermark')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/sm.png')
     return render_template('sm.html')
 
@@ -142,6 +147,7 @@ def st():
     plt.ylabel('Soil Temperature (°C)')
     plt.title('PT-1000')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/st.png')
     return render_template('st.html')
 
@@ -161,6 +167,7 @@ def lum():
     plt.ylabel('Illuminance (lux)')
     plt.title('Luminosity')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/lum.png')
     return render_template('lum.html')
 
@@ -180,6 +187,7 @@ def temp():
     plt.ylabel('Celsius (°C)')
     plt.title('Temperature')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/temp.png')
     return render_template('temp.html')
 
@@ -199,6 +207,7 @@ def humd():
     plt.ylabel('Percentage (%)')
     plt.title('humd')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/humd.png')
     return render_template('humd.html')
 
@@ -219,6 +228,7 @@ def pres():
     plt.ylabel('Standard Atmosphere (atm)')
     plt.title('Pressure')
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('appdir/static/images/pres.png')
     return render_template('pres.html')
 
