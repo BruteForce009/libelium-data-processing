@@ -6,3 +6,4 @@ ngrok.exe
 *.json
 .idea/
 venv/
+images/
